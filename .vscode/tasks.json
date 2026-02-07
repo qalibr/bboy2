@@ -1,0 +1,30 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "xmake build",
+            "type": "shell",
+            "command": "xmake",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": "$gcc",
+            "detail": "Build the project using xmake"
+        },
+    ]
+}
+/*
+    Xmake requires the user to choose which mode (debug/release) they are in. 
+    After selecting a mode, whenever you build and run the program it will 
+    be executed in whatever mode you chose.
+
+    To change modes, use either of these in the CLI.
+
+    xmake f -m debug
+    
+    xmake f -m release
+
+    *Look for '.debug/.release' in the Xmake terminal output to know which mode 
+    you are in.
+*/
