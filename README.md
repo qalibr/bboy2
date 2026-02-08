@@ -1,6 +1,6 @@
 # bboy2
 
-After I wrote my first emulator in C# I immediately wanted to try to write one in C++. This emulator uses function pointers and a lookup table for the CPU instructions, and memory paging for the MMU.
+After I wrote my first emulator in C# I immediately wanted to try to write one in C++. This emulator uses function pointers and a lookup table for the CPU instructions, and memory paging for the MMU. It supports joypad input and loading ROMs via drag-and-drop.
 
 <img src="./img/acid2.png" alt="drawing" style="width:400px;"/>
 
