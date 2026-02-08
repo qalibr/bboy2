@@ -41,6 +41,18 @@ xmake build
 xmake run
 ```
 
+You can also supply an argument to load a rom instantly:
+
+```sh
+xmake run bboy2 <path-to-your-rom>
+```
+
+Example:
+
+```sh
+xmake run bboy2 roms/dmg-acid2.gb
+```
+
 \**Xmake runs in the project directory and expects to find the custom font there (assets/font/...).*
 
 ## Keymap
