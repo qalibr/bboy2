@@ -7,6 +7,7 @@
 class Pak;
 class Timer;
 class Ppu;
+class Joypad;
 
 enum class InterruptType : u8 {
     VBlank = 0,
@@ -27,6 +28,7 @@ class Mmu {
     u8     IF;
     Timer* timer_ptr = nullptr;
     Ppu*   ppu_ptr   = nullptr;
+    Joypad* joy_ptr = nullptr;
 
     std::array<u8*, 16> memory_map;
 
@@ -38,8 +40,9 @@ class Mmu {
     void map_ram_page(u8 page_i, u8* ptr);
 
     void set_timer(Timer* t) { timer_ptr = t; }
-
     void connect_ppu(Ppu* p) { ppu_ptr = p; }
+    void connect_joypad(Joypad* joy) {joy_ptr = joy;}
+    
     void tick_dma(u8 cycles);
 
     void request_interrupt(InterruptType type);
@@ -47,6 +50,8 @@ class Mmu {
     u8   read_u8(u16 addr);
     void write_u8(u16 addr, u8 val);
     u8   ppu_read_u8(u16 addr);
+
+    u8& p1() { return ram.io[0x00]; }
 
     // =============================================================
     //  Graphics Registers

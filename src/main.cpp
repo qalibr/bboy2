@@ -20,6 +20,7 @@ int main(int argc, char** argv) {
     Screen   screen(emulator.ppu);
 
     while (!screen.should_close()) {
+        emulator.joy.handle_input();
         emulator.run_frame();
         screen.update();
     }

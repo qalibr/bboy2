@@ -14,6 +14,7 @@
 #include "pak/pak.h"
 #include "ppu/ppu.h"
 #include "ppu/screen.h"
+#include "joypad.h"
 
 class Emulator {
    public:
@@ -22,6 +23,7 @@ class Emulator {
     Cpu   cpu;
     Ppu   ppu;
     Timer timer;
+    Joypad joy;
 
     Emulator(Pak& p);
     ~Emulator() = default;

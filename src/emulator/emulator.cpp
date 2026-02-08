@@ -3,9 +3,10 @@
 #include <fstream>
 #include <sstream>
 
-Emulator::Emulator(Pak& p) : pak(p), mmu(pak), cpu(mmu), ppu(mmu), timer(mmu) {
+Emulator::Emulator(Pak& p) : pak(p), mmu(pak), cpu(mmu), ppu(mmu), timer(mmu), joy(mmu) {
     mmu.set_timer(&timer);
     mmu.connect_ppu(&ppu);
+    mmu.connect_joypad(&joy);
 }
 
 void Emulator::run_frame() {

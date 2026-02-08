@@ -6,3 +6,6 @@ build/
 libs/include/raylib.h
 libs/include/raymath.h
 libs/lib/raylib.lib
+
+#
+nroms

@@ -1,6 +1,7 @@
 #include "mmu.h"
 
 #include "../cpu/timer.h"
+#include "../joypad.h"
 #include "../pak/pak.h"
 #include "../ppu/ppu.h"
 
@@ -72,8 +73,13 @@ u8 Mmu::read_u8(u16 addr) {
         return ram.read_oam(addr);
     } else if (addr < 0xFF00) {  // ---- Not Usable | 0xFEA0 - 0xFEFF
         return 0xFF;
+
     } else if (addr < 0xFF80) {  // ---- IO Registers | 0xFF00 - 0xFF7F
-        if (addr == 0xFF0F) {
+        if (addr == 0xFF00) {
+            if (joy_ptr) {
+                return joy_ptr->get_joyp_register();
+            }
+        } else if (addr == 0xFF0F) {
             return IF;
         }
         return ram.read_io(addr);
@@ -122,7 +128,10 @@ void Mmu::write_u8(u16 addr, u8 val) {
     } else if (addr < 0xFF80) {  // ---- IO Registers | 0xFF00 - 0xFF7F
         // ##############################################
         // # Special cases, return immediately
-        if (addr == 0xFF04) {
+        if (addr == 0xFF00) {  // JOYP register
+            if (joy_ptr) joy_ptr->set_joyp_register(val);
+            return;
+        } else if (addr == 0xFF04) {
             if (timer_ptr) timer_ptr->reset_div_counter();
             return;
         } else if (addr == 0xFF41) {  // Protecting STAT register's lower 3 bits.
@@ -161,9 +170,7 @@ u8 Mmu::ppu_read_u8(u16 addr) {
         u8* page = memory_map[addr >> 12];
         if (page == nullptr) return 0xFF;
         return page[addr & 0x0FFF];
-    }
-
-    if (addr >= 0xFE00 && addr <= 0xFE9F) {
+    } else if (addr >= 0xFE00 && addr <= 0xFE9F) {
         return ram.read_oam(addr);
     }
 
@@ -176,7 +183,7 @@ void Mmu::tick_dma(u8 cycles) {
     int bytes_to_copy = cycles / 4;
     for (int i = 0; i < bytes_to_copy; i++) {
         u16 src_addr = dma_source_addr + dma_progress;
-        u8  data     = 0xFF;  // default 
+        u8  data     = 0xFF;  // default
 
         if (src_addr < 0xF000) {  // ROM, VRAM, ERAM, WRAM
             u8* page = memory_map[src_addr >> 12];
