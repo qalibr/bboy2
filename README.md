@@ -4,6 +4,58 @@ After I wrote my first emulator in C# I immediately wanted to try to write one i
 
 <img src="./img/acid2.png" alt="drawing" style="width:400px;"/>
 
+## Building and Running
+
+### Clone the repository
+
+```sh
+git clone https://github.com/qalibr/bboy2.git
+cd bboy2
+```
+
+### Build the project
+
+Xmake requires the user to choose which mode, *debug or release*, they are in (default is release). After selecting a mode, whenever you build and run the program it will be executed in whatever mode you chose.
+
+To change modes, use either of these in the CLI.
+
+```sh
+xmake f -m debug
+```
+
+```sh
+xmake f -m release
+```
+
+Then, build:
+
+```sh
+xmake build
+```
+
+\**Look for '.debug/.release' in the terminal output to know which mode you are in.*
+
+### Run the emulator
+
+```sh
+xmake run
+```
+
+\**Xmake runs in the project directory and expects to find the custom font there (assets/font/...).*
+
+## Keymap
+
+| Action        | Key           |
+| ------------- | ------------- |
+| D-Pad Up      | `W`           |
+| D-Pad Down    | `S`           |
+| D-Pad Left    | `A`           |
+| D-Pad Right   | `D`           |
+| A Button      | `E`           |
+| B Button      | `R`           |
+| Start         | `F`           |
+| Select        | `Z`           |
+
 ## Resoures
 
 <https://gbdev.io/pandocs/>

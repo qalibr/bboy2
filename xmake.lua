@@ -7,6 +7,8 @@ target("bboy2")
     set_kind("binary")
     set_languages("c++17")
 
+    set_rundir("$(projectdir)")
+
     add_files("src/**.cpp")
     add_includedirs("src")
 
