@@ -29,8 +29,15 @@ int main(int argc, char** argv) {
 
     while (!screen.should_close()) {
         emulator.joy.handle_input();
+
+        if (emulator.joy.is_fps_uncapped()) {
+            SetTargetFPS(0);
+        } else {
+            SetTargetFPS(60);
+        }
+
         emulator.run_frame();
-        screen.update();
+        screen.update(emulator.joy.should_display_fps());
     }
 
     screen.window_terminate();

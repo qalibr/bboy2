@@ -16,7 +16,14 @@ class Joypad {
 
     void handle_input();
 
+    bool is_fps_uncapped() const;
+    bool should_display_fps() const;
+
    private:
     bool up, down, left, right;
     bool a, b, start, select;
+    bool uncapped_fps;
+    bool display_fps;
+
+    int calculate_uncapped_fps(int budget_utilized);
 };

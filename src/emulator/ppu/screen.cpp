@@ -16,11 +16,16 @@ Screen::Screen() {
 
 void Screen::connect_ppu(Ppu& p) { ppu_ptr = &p; }
 
-void Screen::update() {
+void Screen::update(bool show_fps) {
     if (ppu_ptr) UpdateTexture(texture, ppu_ptr->get_frame_buffer().data());
     BeginDrawing();
     ClearBackground(DARKGRAY);
     DrawTextureEx(texture, {0.0f, 0.0f}, 0.0f, (float)screen_scaling_factor, WHITE);
+
+    if (show_fps) {
+        display_fps();
+    }
+
     EndDrawing();
 }
 
@@ -62,4 +67,11 @@ std::string Screen::drag_and_drop_wait() {
 
     UnloadFont(customFont);
     return rom_path;
+}
+
+void Screen::display_fps() {
+    const char* text      = TextFormat("%i", GetFPS());
+    int         fontSize  = 20;
+    int         textWidth = MeasureText(text, fontSize);
+    DrawText(text, GetScreenWidth() - textWidth - 10, 10, fontSize, LIGHTGRAY);
 }

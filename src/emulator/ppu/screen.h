@@ -15,7 +15,7 @@ class Screen {
 
     void connect_ppu(Ppu& p);
 
-    void update();
+    void update(bool show_fps);
 
     bool should_close();
 
@@ -24,6 +24,7 @@ class Screen {
     std::string drag_and_drop_wait();
 
    private:
+    void      display_fps();
     Texture2D texture;
     Image     image;
 };

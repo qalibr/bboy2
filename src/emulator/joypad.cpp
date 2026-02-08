@@ -1,8 +1,17 @@
 #include "joypad.h"
 
 Joypad::Joypad(Mmu& m) : mmu(m) {
-    // Initializing no buttons selected
-    mmu.p1() = 0x30;
+    mmu.p1()     = 0x30;
+    up           = false;
+    down         = false;
+    left         = false;
+    right        = false;
+    a            = false;
+    b            = false;
+    start        = false;
+    select       = false;
+    uncapped_fps = false;
+    display_fps  = true;
 }
 
 u8 Joypad::get_joyp_register() {
@@ -29,6 +38,10 @@ u8 Joypad::get_joyp_register() {
 
 void Joypad::set_joyp_register(u8 val) { mmu.p1() = (mmu.p1() & 0xCF) | (val & 0x30); }
 
+bool Joypad::is_fps_uncapped() const { return uncapped_fps; }
+
+bool Joypad::should_display_fps() const { return display_fps; }
+
 // Polling the keyboard and letting the CPU know via interrupt whenever the input state
 // has changed. The CPU will then check 0xFF00 for the new input state.
 void Joypad::handle_input() {
@@ -44,6 +57,12 @@ void Joypad::handle_input() {
     b      = IsKeyDown(KeyboardKey::KEY_R);
     start  = IsKeyDown(KeyboardKey::KEY_F);
     select = IsKeyDown(KeyboardKey::KEY_Z);
+
+    uncapped_fps = IsKeyDown(KeyboardKey::KEY_SPACE);
+
+    if (IsKeyPressed(KeyboardKey::KEY_I)) {
+        display_fps = !display_fps;
+    }
 
     // clang-format off
     bool button_pressed = 
