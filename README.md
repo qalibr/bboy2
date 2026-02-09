@@ -1,6 +1,6 @@
 # bboy2
 
-After I wrote my first emulator in C# I immediately wanted to try to write one in C++. This emulator uses function pointers with a lookup table for the CPU instructions and memory paging for the MMU. It supports joypad input and loading ROMs via drag-and-drop. Holding `space` uncaps FPS (release build runs Pokemon at 3400 FPS on my system). Can toggle FPS display with `I`.
+After I wrote my first emulator in C# I immediately wanted to try to write one in C++. This emulator uses function pointers with a lookup table for the CPU instructions and memory paging for the MMU. It supports joypad input, saving and loading states, and loading ROMs via drag-and-drop or via CLI. Holding `space` uncaps FPS.
 
 <img src="./img/acid2.png" alt="drawing" style="width:400px;"/>
 
@@ -68,6 +68,8 @@ xmake run bboy2 roms/dmg-acid2.gb
 | Start             | `F`           |
 | Select            | `Z`           |
 | Toggle FPS        | `I`           |
+| Save State        | `Ctrl + T`    |
+| Load State        | `Ctrl + L`    |
 | Uncap FPS (Hold)  | `Space`       |
 
 ## Resoures

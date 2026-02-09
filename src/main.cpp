@@ -30,6 +30,16 @@ int main(int argc, char** argv) {
     while (!screen.should_close()) {
         emulator.joy.handle_input();
 
+        if (emulator.joy.should_trigger_save()) {
+            emulator.save_state(rom_path);
+            emulator.joy.action_performed();
+        }
+
+        if (emulator.joy.should_trigger_load()) {
+            emulator.load_state(rom_path);
+            emulator.joy.action_performed();
+        }
+
         if (emulator.joy.is_fps_uncapped()) {
             SetTargetFPS(0);
         } else {

@@ -5,6 +5,8 @@
 #include <iomanip>
 #include <iostream>
 
+#include "../emulator.h"
+
 Ppu::Ppu(Mmu& m) : mmu(m) {
     scanline_counter    = 0;
     window_line_counter = 0;
@@ -20,6 +22,21 @@ Ppu::Ppu(Mmu& m) : mmu(m) {
         obj_palette1.colors[i] = default_colors[i];
     }
 }
+
+void Ppu::save_state(PpuState& state) const {
+    state.scanline_counter    = scanline_counter;
+    state.window_line_counter = window_line_counter;
+    state.prev_signal         = prev_signal;
+}
+
+void Ppu::load_state(const PpuState& state) {
+    scanline_counter    = state.scanline_counter;
+    window_line_counter = state.window_line_counter;
+    prev_signal         = state.prev_signal;
+
+    update_palettes();
+}
+
 const std::array<Color, Ppu::SCREEN_WIDTH * Ppu::SCREEN_HEIGHT>& Ppu::get_frame_buffer() const { return frame_buffer; }
 
 void Ppu::tick(u8 cycles) {

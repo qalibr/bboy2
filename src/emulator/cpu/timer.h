@@ -2,6 +2,8 @@
 
 #include "../mmu/mmu.h"
 
+struct TimerState;
+
 class Timer {
    public:
     Mmu& mmu;
@@ -11,6 +13,9 @@ class Timer {
     void tick(u8 cycles);
 
     void reset_div_counter();
+
+    void save_state(TimerState& state) const;
+    void load_state(const TimerState& state);
 
    private:
     u16 counter;

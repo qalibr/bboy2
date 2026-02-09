@@ -12,6 +12,8 @@ Joypad::Joypad(Mmu& m) : mmu(m) {
     select       = false;
     uncapped_fps = false;
     display_fps  = true;
+    trigger_save = false;
+    trigger_load = false;
 }
 
 u8 Joypad::get_joyp_register() {
@@ -42,11 +44,29 @@ bool Joypad::is_fps_uncapped() const { return uncapped_fps; }
 
 bool Joypad::should_display_fps() const { return display_fps; }
 
+bool Joypad::should_trigger_save() const { return trigger_save; }
+
+bool Joypad::should_trigger_load() const { return trigger_load; }
+
+void Joypad::action_performed() {
+    trigger_save = false;
+    trigger_load = false;
+}
+
 // Polling the keyboard and letting the CPU know via interrupt whenever the input state
 // has changed. The CPU will then check 0xFF00 for the new input state.
 void Joypad::handle_input() {
     bool prev_up = up, prev_down = down, prev_left = left, prev_right = right;
     bool prev_a = a, prev_b = b, prev_start = start, prev_select = select;
+
+    bool is_ctrl_down = IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL);
+
+    if (is_ctrl_down && IsKeyPressed(KeyboardKey::KEY_T)) {
+        trigger_save = true;
+    }
+    if (is_ctrl_down && IsKeyPressed(KeyboardKey::KEY_L)) {
+        trigger_load = true;
+    }
 
     up    = IsKeyDown(KeyboardKey::KEY_W);
     down  = IsKeyDown(KeyboardKey::KEY_S);

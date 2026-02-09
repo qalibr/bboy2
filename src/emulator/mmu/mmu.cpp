@@ -4,6 +4,7 @@
 #include "../joypad.h"
 #include "../pak/pak.h"
 #include "../ppu/ppu.h"
+#include "../emulator.h"
 
 Mmu::Mmu(Pak& p) : pak(p) {
     memory_map.fill(nullptr);
@@ -37,6 +38,32 @@ Mmu::Mmu(Pak& p) : pak(p) {
 
     init_io_registers();
 };
+
+void Mmu::save_state(MmuState& state) const {
+    state.wram             = ram.wram;
+    state.io               = ram.io;
+    state.hram             = ram.hram;
+    state.vram             = ram.vram;
+    state.oam              = ram.oam;
+    state.IE               = IE;
+    state.IF               = IF;
+    state.dma_active       = dma_active;
+    state.dma_source_addr  = dma_source_addr;
+    state.dma_progress     = dma_progress;
+}
+
+void Mmu::load_state(const MmuState& state) {
+    ram.wram            = state.wram;
+    ram.io              = state.io;
+    ram.hram            = state.hram;
+    ram.vram            = state.vram;
+    ram.oam             = state.oam;
+    IE                  = state.IE;
+    IF                  = state.IF;
+    dma_active          = state.dma_active;
+    dma_source_addr     = state.dma_source_addr;
+    dma_progress        = state.dma_progress;
+}
 
 void Mmu::map_rom_page(u8 page_i, u16 bank_n) {
     int rom_offset  = bank_n * 0x4000;

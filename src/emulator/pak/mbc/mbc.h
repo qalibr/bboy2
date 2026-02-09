@@ -1,9 +1,11 @@
 #pragma once
 
 #include <chrono>
+#include <fstream>
 #include <iostream>
 #include <vector>
 
+#include "../../emulator.h"
 #include "../../mmu/mmu.h"
 #include "Imbc.h"
 
@@ -26,6 +28,9 @@ class Base : public Imbc {
     ~Base() override = default;
 
     void set_mmu(Mmu* m) override { this->mmu = m; }
+
+    void save_state(std::ostream& out) override;
+    void load_state(std::istream& in) override;
 
     std::vector<u8> eram;
     bool            is_eram_enabled;

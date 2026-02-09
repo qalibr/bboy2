@@ -1,8 +1,20 @@
 #include "timer.h"
 
+#include "../emulator.h"
+
 Timer::Timer(Mmu& m) : mmu(m) {
     counter      = 0;
     tima_counter = 0;
+}
+
+void Timer::save_state(TimerState& state) const {
+    state.counter      = counter;
+    state.tima_counter = tima_counter;
+}
+
+void Timer::load_state(const TimerState& state) {
+    counter      = state.counter;
+    tima_counter = state.tima_counter;
 }
 
 void Timer::tick(u8 cycles) {

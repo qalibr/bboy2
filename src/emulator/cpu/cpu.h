@@ -10,6 +10,8 @@
 
 class Cpu;
 
+struct CpuState;
+
 using InstructionHandler = void (Cpu::*)();
 
 struct Instruction {
@@ -32,6 +34,9 @@ class Cpu {
     bool IME;
     bool halted;
     bool halt_bug = false;
+
+    void save_state(CpuState& state) const;
+    void load_state(const CpuState& state);
 
     inline u8 step() {
         handle_interrupts();

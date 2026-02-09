@@ -4,6 +4,7 @@
 
 #include "ram.h"
 
+struct MmuState;
 class Pak;
 class Timer;
 class Ppu;
@@ -42,7 +43,10 @@ class Mmu {
     void set_timer(Timer* t) { timer_ptr = t; }
     void connect_ppu(Ppu* p) { ppu_ptr = p; }
     void connect_joypad(Joypad* joy) {joy_ptr = joy;}
-    
+
+    void save_state(MmuState &state) const;
+    void load_state(const MmuState& state);
+
     void tick_dma(u8 cycles);
 
     void request_interrupt(InterruptType type);

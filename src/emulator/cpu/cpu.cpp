@@ -6,6 +6,8 @@
 #include <iostream>
 #include <sstream>
 
+#include "../emulator.h"
+
 #define STUB(name)                                \
     void Cpu::name() {                            \
         std::cerr << "STUB: " #name << std::endl; \
@@ -17,6 +19,40 @@ Cpu::Cpu(Mmu& m) : mmu(m) {
     init_instructions();
     ime_schedule = 0;
     halted       = false;
+}
+
+void Cpu::save_state(CpuState& state) const {
+    state.a            = reg.A;
+    state.f            = reg.F;
+    state.b            = reg.B;
+    state.c            = reg.C;
+    state.d            = reg.D;
+    state.e            = reg.E;
+    state.h            = reg.H;
+    state.l            = reg.L;
+    state.sp           = reg.SP;
+    state.pc           = reg.PC;
+    state.ime          = IME;
+    state.halted       = halted;
+    state.halt_bug     = halt_bug;
+    state.ime_schedule = ime_schedule;
+}
+
+void Cpu::load_state(const CpuState& state) {
+    reg.A        = state.a;
+    reg.F        = state.f;
+    reg.B        = state.b;
+    reg.C        = state.c;
+    reg.D        = state.d;
+    reg.E        = state.e;
+    reg.H        = state.h;
+    reg.L        = state.l;
+    reg.SP       = state.sp;
+    reg.PC       = state.pc;
+    IME          = state.ime;
+    halted       = state.halted;
+    halt_bug     = state.halt_bug;
+    ime_schedule = state.ime_schedule;
 }
 
 // =============================================================

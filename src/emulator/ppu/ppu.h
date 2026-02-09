@@ -5,6 +5,8 @@
 #include "../mmu/mmu.h"
 #include "raylib.h"
 
+struct PpuState;
+
 enum class Mode {
     HBlank  = 0,
     VBlank  = 1,
@@ -48,6 +50,9 @@ class Ppu {
     static constexpr int CYCLES_PER_FRAME  = CYCLES_PER_SCANLINE * TOTAL_SCANLINES;
 
     void tick(u8 cycles);
+
+    void save_state(PpuState& state) const;
+    void load_state(const PpuState& state);
 
     const std::array<Color, SCREEN_WIDTH * SCREEN_HEIGHT>& get_frame_buffer() const;
 
