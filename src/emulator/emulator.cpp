@@ -1,5 +1,6 @@
 #include "emulator.h"
 
+#include <cstring>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -80,6 +81,21 @@ void Emulator::load_state(const std::string& rom_path) {
 
     SaveHeader header;
     in.read(reinterpret_cast<char*>(&header), sizeof(SaveHeader));
+
+    SaveHeader expected_header;
+    if (std::memcmp(header.magic, expected_header.magic, sizeof(header.magic)) != 0) {
+        std::cerr << "Error: Invalid save file format." << std::endl;
+        return;
+    }
+
+    if (header.version != expected_header.version) {
+        if (header.version > expected_header.version) {
+            std::cerr << "Error: Save file is from a newer version of the emulator." << std::endl;
+        } else {
+            std::cerr << "Error: Save file is from an older, incompatible version of the emulator." << std::endl;
+        }
+        return;
+    }
 
     MmuState mmu_state;
     in.read(reinterpret_cast<char*>(&mmu_state), sizeof(MmuState));

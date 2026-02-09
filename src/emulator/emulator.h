@@ -18,6 +18,9 @@
 #include "ppu/ppu.h"
 #include "ppu/screen.h"
 
+// IMPORTANT!
+// If a future change alters any of the state structs below, remember
+// to increment version number.
 struct SaveHeader {
     char magic[4] = {'G', 'B', 'S', 'T'};
     u32  version  = 1;
