@@ -55,6 +55,80 @@ xmake run bboy2 roms/dmg-acid2.gb
 
 \**Xmake runs in the project directory and expects to find the custom font there (assets/font/...).*
 
+## Tracy Profiler (Windows)
+
+Recently added [Tracy](https://github.com/wolfpld/tracy), a C++ frame profiler, to the project. If you want to try it, you can follow the setup below.
+
+### Setup
+
+1. Clone the Tracy repository into your project directory.
+
+    ```sh
+    git clone https://github.com/wolfpld/tracy.git
+    ```
+
+2. Download the [Tracy Profiler](https://github.com/wolfpld/tracy/releases) GUI for Windows from the releases page.
+
+3. **Match versions**: The Tracy client you cloned must match the Tracy Profiler you downloaded.
+    - Extract the contents of the zip file into an unrelated folder and run the executable `tracy-profiler.exe`. Check what version it is (e.g., v0.13.1).
+    - In your terminal, check out the matching version tag in the `tracy` directory.
+
+    ```sh
+    cd tracy
+    git fetch --tags
+    git checkout v0.13.1
+    cd ..
+    ```
+
+### Building with profiling enabled
+
+1. To enable profiling, configure xmake with the following command:
+
+    ```sh
+    xmake f -m release --profile_trace=y
+    ```
+
+2. Build:
+
+    ```sh
+    xmake build
+    ```
+
+It's best to use release build for profiling.
+
+### Disabling profiling
+
+1. When you want to run without profiling simply use this command:
+
+    ```sh
+    xmake f -m debug --profile_trace=n
+    ```
+
+2. Build:
+
+    ```sh
+    xmake build
+    ```
+
+### How to profile
+
+1. Launch `tracy-profiler.exe`.
+2. Click the `Connect` button, the application is now listening for the client we cloned to begin running.
+3. Now simply run the program:
+
+    ```sh
+    xmake run
+    ```
+
+### Adding code to the profile
+
+You can easily add more functions to the profiler timeline using macros:
+
+- `ZoneScoped`: Add to the top of a scope or function you want to measure.
+- `FrameMark`: Marks the end of a frame. It is already placed in the main loop.
+
+See `src/main.cpp` and `src/emulator/emulator.cpp` for examples.
+
 ## Keymap
 
 | Action            | Key           |
@@ -95,3 +169,7 @@ xmake run bboy2 roms/dmg-acid2.gb
 ## Libraries
 
 <https://github.com/raysan5/raylib/releases>
+
+## Tools
+
+<https://github.com/wolfpld/tracy>

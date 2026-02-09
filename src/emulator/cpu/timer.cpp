@@ -1,5 +1,7 @@
 #include "timer.h"
 
+#include <tracy/Tracy.hpp>
+
 #include "../emulator.h"
 
 Timer::Timer(Mmu& m) : mmu(m) {
@@ -18,6 +20,8 @@ void Timer::load_state(const TimerState& state) {
 }
 
 void Timer::tick(u8 cycles) {
+    ZoneScoped;
+
     counter += cycles;
     mmu.div() = counter >> 8;
 

@@ -10,3 +10,5 @@ libs/lib/raylib.lib
 #
 nroms
 *.sav
+tracy
+notes.txt

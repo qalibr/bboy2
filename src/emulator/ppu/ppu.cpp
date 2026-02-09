@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <tracy/Tracy.hpp>
 
 #include "../emulator.h"
 
@@ -40,6 +41,8 @@ void Ppu::load_state(const PpuState& state) {
 const std::array<Color, Ppu::SCREEN_WIDTH * Ppu::SCREEN_HEIGHT>& Ppu::get_frame_buffer() const { return frame_buffer; }
 
 void Ppu::tick(u8 cycles) {
+    ZoneScoped;
+
     bool lcd_enabled = is_lcd_enabled();
 
     if (lcd_enabled) {

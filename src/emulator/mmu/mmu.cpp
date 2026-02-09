@@ -1,10 +1,12 @@
 #include "mmu.h"
 
+#include <tracy/Tracy.hpp>
+
 #include "../cpu/timer.h"
+#include "../emulator.h"
 #include "../joypad.h"
 #include "../pak/pak.h"
 #include "../ppu/ppu.h"
-#include "../emulator.h"
 
 Mmu::Mmu(Pak& p) : pak(p) {
     memory_map.fill(nullptr);
@@ -40,29 +42,29 @@ Mmu::Mmu(Pak& p) : pak(p) {
 };
 
 void Mmu::save_state(MmuState& state) const {
-    state.wram             = ram.wram;
-    state.io               = ram.io;
-    state.hram             = ram.hram;
-    state.vram             = ram.vram;
-    state.oam              = ram.oam;
-    state.IE               = IE;
-    state.IF               = IF;
-    state.dma_active       = dma_active;
-    state.dma_source_addr  = dma_source_addr;
-    state.dma_progress     = dma_progress;
+    state.wram            = ram.wram;
+    state.io              = ram.io;
+    state.hram            = ram.hram;
+    state.vram            = ram.vram;
+    state.oam             = ram.oam;
+    state.IE              = IE;
+    state.IF              = IF;
+    state.dma_active      = dma_active;
+    state.dma_source_addr = dma_source_addr;
+    state.dma_progress    = dma_progress;
 }
 
 void Mmu::load_state(const MmuState& state) {
-    ram.wram            = state.wram;
-    ram.io              = state.io;
-    ram.hram            = state.hram;
-    ram.vram            = state.vram;
-    ram.oam             = state.oam;
-    IE                  = state.IE;
-    IF                  = state.IF;
-    dma_active          = state.dma_active;
-    dma_source_addr     = state.dma_source_addr;
-    dma_progress        = state.dma_progress;
+    ram.wram        = state.wram;
+    ram.io          = state.io;
+    ram.hram        = state.hram;
+    ram.vram        = state.vram;
+    ram.oam         = state.oam;
+    IE              = state.IE;
+    IF              = state.IF;
+    dma_active      = state.dma_active;
+    dma_source_addr = state.dma_source_addr;
+    dma_progress    = state.dma_progress;
 }
 
 void Mmu::map_rom_page(u8 page_i, u16 bank_n) {
@@ -75,6 +77,8 @@ void Mmu::map_rom_page(u8 page_i, u16 bank_n) {
 void Mmu::map_ram_page(u8 page_i, u8* ptr) { memory_map[page_i] = ptr; }
 
 u8 Mmu::read_u8(u16 addr) {
+    ZoneScoped;
+
     if (dma_active && addr < 0xFF80) {
         return 0xFF;
     }
@@ -118,6 +122,8 @@ u8 Mmu::read_u8(u16 addr) {
 }
 
 void Mmu::write_u8(u16 addr, u8 val) {
+    ZoneScoped;
+
     if (dma_active && addr < 0xFF80) {
         return;
     }
@@ -193,6 +199,8 @@ void Mmu::write_u8(u16 addr, u8 val) {
 }
 
 u8 Mmu::ppu_read_u8(u16 addr) {
+    ZoneScoped;
+
     if (addr >= 0x8000 && addr <= 0x9FFF) {
         u8* page = memory_map[addr >> 12];
         if (page == nullptr) return 0xFF;
@@ -205,6 +213,8 @@ u8 Mmu::ppu_read_u8(u16 addr) {
 }
 
 void Mmu::tick_dma(u8 cycles) {
+    ZoneScoped;
+
     if (!dma_active) return;
 
     int bytes_to_copy = cycles / 4;

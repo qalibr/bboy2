@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <tracy/Tracy.hpp>
 
 Emulator::Emulator(Pak& p) : pak(p), mmu(pak), cpu(mmu), ppu(mmu), timer(mmu), joy(mmu) {
     mmu.set_timer(&timer);
@@ -13,6 +14,8 @@ Emulator::Emulator(Pak& p) : pak(p), mmu(pak), cpu(mmu), ppu(mmu), timer(mmu), j
 }
 
 void Emulator::run_frame() {
+    ZoneScoped;
+
     int cycles_this_frame = 0;
 
     while (cycles_this_frame < Ppu::CYCLES_PER_FRAME) {

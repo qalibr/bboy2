@@ -1,5 +1,7 @@
 #include "joypad.h"
 
+#include <tracy/Tracy.hpp>
+
 Joypad::Joypad(Mmu& m) : mmu(m) {
     mmu.p1()     = 0x30;
     up           = false;
@@ -56,6 +58,8 @@ void Joypad::action_performed() {
 // Polling the keyboard and letting the CPU know via interrupt whenever the input state
 // has changed. The CPU will then check 0xFF00 for the new input state.
 void Joypad::handle_input() {
+    ZoneScoped;
+
     bool prev_up = up, prev_down = down, prev_left = left, prev_right = right;
     bool prev_a = a, prev_b = b, prev_start = start, prev_select = select;
 

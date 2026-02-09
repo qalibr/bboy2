@@ -1,9 +1,12 @@
 #include <iostream>
 #include <string>
 
+
 #include "emulator/emulator.h"
 #include "emulator/pak/pak.h"
 #include "emulator/ppu/screen.h"
+
+#include <tracy/Tracy.hpp>
 
 int main(int argc, char** argv) {
     std::string rom_path;
@@ -28,6 +31,8 @@ int main(int argc, char** argv) {
     screen.connect_ppu(emulator.ppu);
 
     while (!screen.should_close()) {
+        ZoneScopedN("MainLoop");
+
         emulator.joy.handle_input();
 
         if (emulator.joy.should_trigger_save()) {
@@ -48,6 +53,8 @@ int main(int argc, char** argv) {
 
         emulator.run_frame();
         screen.update(emulator.joy.should_display_fps());
+
+        FrameMark;
     }
 
     screen.window_terminate();
